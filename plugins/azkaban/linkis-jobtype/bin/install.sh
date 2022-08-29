@@ -50,4 +50,4 @@ scp   -P $SSH_PORT  -r ${workDir} $AZKABAN_EXECUTOR_HOST:$AZKABAN_JOBTYPE_DIR
 
 echo "reload jobType"
 
-##curl $AZKABAN_EXECUTOR_URL
+curl $AZKABAN_EXECUTOR_URL
