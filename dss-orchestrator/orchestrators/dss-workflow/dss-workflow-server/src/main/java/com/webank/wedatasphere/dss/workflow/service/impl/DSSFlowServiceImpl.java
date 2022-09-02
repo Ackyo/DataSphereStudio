@@ -253,12 +253,12 @@ public class DSSFlowServiceImpl implements DSSFlowService {
     public boolean isEqualTwoJson(String oldJsonNode, String newJsonNode) {
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
-        JsonObject jsonObject = parser.parse(oldJsonNode).getAsJsonObject();
+        JsonObject jsonObject = parser.parse(oldJsonNode.length() == 0 ? "{}" : oldJsonNode).getAsJsonObject();
         jsonObject.remove("updateTime");
         jsonObject.remove("comment");
         String tempOldJson = gson.toJson(jsonObject);
 
-        JsonObject jsonObject2 = parser.parse(newJsonNode).getAsJsonObject();
+        JsonObject jsonObject2 = parser.parse(newJsonNode.length() == 0 ? "{}" : newJsonNode).getAsJsonObject();
         jsonObject2.remove("updateTime");
         jsonObject2.remove("comment");
         String tempNewJson = gson.toJson(jsonObject2);
