@@ -16,6 +16,7 @@
 
 package com.webank.wedatasphere.dss.appconn.sendemail.email.generate
 
+import com.webank.wedatasphere.dss.appconn.sendemail.conf.SendEmailAppConnConfiguration.EMAIL_USERNAME
 import com.webank.wedatasphere.dss.appconn.sendemail.email.domain.AbstractEmail
 import com.webank.wedatasphere.dss.appconn.sendemail.email.{Email, EmailGenerator}
 import com.webank.wedatasphere.dss.common.utils.VariableUtils
@@ -57,9 +58,10 @@ trait AbstractEmailGenerator extends EmailGenerator with Logging{
     val cc = if (runtimeMap.get("cc") != null) runtimeMap.get("cc").toString else ""
     email.setCc(cc)
     val from = if (runtimeMap.get("from") != null) runtimeMap.get("from").toString else
-      if(runtimeMap.get("wds.dss.workflow.submit.user") != null){
-      runtimeMap.get("wds.dss.workflow.submit.user").toString
-    } else runtimeMap.get("user").toString
+      if(EMAIL_USERNAME.getValue != null){
+        EMAIL_USERNAME.getValue
+    } else
+        runtimeMap.get("user").toString
     email.setFrom(from)
     val to = if (runtimeMap.get("to") != null) runtimeMap.get("to").toString else ""
     email.setTo(to)

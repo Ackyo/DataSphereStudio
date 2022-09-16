@@ -45,7 +45,7 @@ public class SpringJavaEmailSender extends AbstractEmailSender {
     @Override
     public void init(Map<String, String> properties) {
         Properties prop = new Properties();
-        prop.put("mail.smtp.auth", Boolean.parseBoolean(EMAIL_SMTP_AUTH().getValue(properties)));
+        prop.put("mail.smtp.auth", EMAIL_SMTP_AUTH().getValue(properties));
         prop.put("mail.smtp.starttls.enable", Boolean.parseBoolean(EMAIL_SMTP_STARTTLS_ENABLE().getValue(properties)));
         prop.put("mail.smtp.starttls.required", Boolean.parseBoolean(EMAIL_SMTP_STARTTLS_REQUIRED().getValue(properties)));
         prop.put("mail.smtp.ssl.enable", Boolean.parseBoolean(EMAIL_SMTP_SSL_ENABLED().getValue(properties)));
