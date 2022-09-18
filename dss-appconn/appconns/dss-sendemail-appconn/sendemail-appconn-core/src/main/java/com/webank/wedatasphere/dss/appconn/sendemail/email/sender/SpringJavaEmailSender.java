@@ -20,6 +20,8 @@ import com.webank.wedatasphere.dss.appconn.sendemail.email.Email;
 import com.webank.wedatasphere.dss.appconn.sendemail.email.domain.Attachment;
 import com.webank.wedatasphere.dss.appconn.sendemail.exception.EmailSendFailedException;
 import com.webank.wedatasphere.dss.standard.common.exception.operation.ExternalOperationFailedException;
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.linkis.common.conf.CommonVars;
 import org.slf4j.Logger;
@@ -84,6 +86,8 @@ public class SpringJavaEmailSender extends AbstractEmailSender {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
+            messageHelper.setText(email.getContent(), true);
+
             if (StringUtils.isBlank(email.getFrom())) {
                 messageHelper.setFrom(DEFAULT_EMAIL_FROM().getValue());
             } else {
@@ -98,9 +102,13 @@ public class SpringJavaEmailSender extends AbstractEmailSender {
                 messageHelper.setBcc(email.getBcc());
             }
             for (Attachment attachment : email.getAttachments()) {
-                messageHelper.addAttachment(attachment.getName(), new ByteArrayDataSource(attachment.getBase64Str(), attachment.getMediaType()));
+                ByteArrayDataSource res = new ByteArrayDataSource(new ByteArrayInputStream(
+                    Base64.getDecoder().decode(attachment.getBase64Str().replaceAll("\r\n", ""))),
+                    attachment.getMediaType());
+                messageHelper.addInline(attachment.getName(), res);
+                messageHelper.addAttachment(attachment.getName(), res);
             }
-            messageHelper.setText(email.getContent(), true);
+
         } catch (Exception e) {
             logger.error("Send mail failed", e);
         }
