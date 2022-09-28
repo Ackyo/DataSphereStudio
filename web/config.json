@@ -60,7 +60,7 @@
   "exts": {
   },
   "conf": {
-    "app_name": "DataSphere Studio",
+    "app_name": "oIBP BigData Platform",
     "app_logo": "dss/assets/images/dssLogo.png",
     "user_guide": "",
     "hide_view_tb_detail": true,
