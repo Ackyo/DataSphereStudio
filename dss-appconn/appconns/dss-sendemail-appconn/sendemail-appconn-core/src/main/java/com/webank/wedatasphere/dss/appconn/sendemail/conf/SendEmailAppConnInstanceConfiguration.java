@@ -71,6 +71,9 @@ public class SendEmailAppConnInstanceConfiguration {
 
     private static SendEmailRefExecutionHook[] createSendEmailRefExecutionHooks() {
         String hookClasses = SendEmailAppConnConfiguration.EMAIL_HOOK_CLASSES().getValue();
+        if (hookClasses.isEmpty()){
+            return new SendEmailRefExecutionHook[]{};
+        }
         logger.info("Use email hook class: {}", hookClasses);
         return Arrays.stream(hookClasses.split(",")).map(clazz -> {
             SendEmailRefExecutionHook sendEmailRefExecutionHook = null;

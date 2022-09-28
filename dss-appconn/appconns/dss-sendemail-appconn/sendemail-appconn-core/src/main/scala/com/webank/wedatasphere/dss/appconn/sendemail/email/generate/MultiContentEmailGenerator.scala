@@ -18,7 +18,7 @@ package com.webank.wedatasphere.dss.appconn.sendemail.email.generate
 
 import com.webank.wedatasphere.dss.appconn.sendemail.cs.EmailCSHelper
 import com.webank.wedatasphere.dss.appconn.sendemail.email.domain.{AbstractEmail, MultiContentEmail}
-import com.webank.wedatasphere.dss.appconn.sendemail.emailcontent.domain.PictureEmailContent
+import com.webank.wedatasphere.dss.appconn.sendemail.emailcontent.domain.{FileEmailContent, HtmlEmailContent, PictureEmailContent, TableEmailContent}
 import com.webank.wedatasphere.dss.appconn.sendemail.exception.EmailSendFailedException
 import com.webank.wedatasphere.dss.standard.app.development.listener.ref.RefExecutionRequestRef
 import org.apache.linkis.storage.resultset.ResultSetFactory
@@ -38,10 +38,14 @@ class MultiContentEmailGenerator extends AbstractEmailGenerator {
             refContext.fetchLinkisJobResultSetPaths(jobId).foreach { fsPath =>
               val resultSet = resultSetFactory.getResultSetByPath(fsPath)
               val emailContent = resultSet.resultSetType() match {
+                case ResultSetFactory.HTML_TYPE => new HtmlEmailContent(fsPath)
+                case ResultSetFactory.TABLE_TYPE => new TableEmailContent(fsPath)
+                case ResultSetFactory.TEXT_TYPE => new FileEmailContent(fsPath)
                 case ResultSetFactory.PICTURE_TYPE => new PictureEmailContent(fsPath)
-                case ResultSetFactory.HTML_TYPE => throw new EmailSendFailedException(80003 ,"html result set is not allowed")//new HtmlEmailContent(fsPath)
-                case ResultSetFactory.TABLE_TYPE => throw new EmailSendFailedException(80003 ,"table result set is not allowed")//new TableEmailContent(fsPath)
-                case ResultSetFactory.TEXT_TYPE => throw new EmailSendFailedException(80003 ,"text result set is not allowed")//new FileEmailContent(fsPath)
+                // case ResultSetFactory.HTML_TYPE => throw new EmailSendFailedException(80003 ,"html result set is not allowed")//new HtmlEmailContent(fsPath)
+                // case ResultSetFactory.TABLE_TYPE => throw new EmailSendFailedException(80003 ,"table result set is not allowed")//new TableEmailContent(fsPath)
+                // case ResultSetFactory.TEXT_TYPE => throw new EmailSendFailedException(80003 ,"text result set is not allowed")//new FileEmailContent(fsPath)
+
               }
               multiContentEmail.addEmailContent(emailContent)
             }
@@ -51,8 +55,5 @@ class MultiContentEmailGenerator extends AbstractEmailGenerator {
         case "link" => throw new EmailSendFailedException(80003 ,"link content is not allowed")//addContentEmail(new UrlEmailContent(_))
       }
   }
-
-
-
 
 }
