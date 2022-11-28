@@ -52,6 +52,10 @@ public class SpringJavaEmailSender extends AbstractEmailSender {
         prop.put("mail.smtp.starttls.required", Boolean.parseBoolean(EMAIL_SMTP_STARTTLS_REQUIRED().getValue(properties)));
         prop.put("mail.smtp.ssl.enable", Boolean.parseBoolean(EMAIL_SMTP_SSL_ENABLED().getValue(properties)));
         prop.put("mail.smtp.timeout", EMAIL_SMTP_TIMEOUT().getValue(properties));
+        if (Boolean.parseBoolean(EMAIL_SMTP_SSL_ENABLED().getValue(properties))){
+            prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        }
+
         javaMailSender.setJavaMailProperties(prop);
         BiConsumer<Consumer<String>, CommonVars<String>> setProp = (consumer, c) -> {
             String value = c.getValue(properties);

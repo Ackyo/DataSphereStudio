@@ -42,7 +42,7 @@ object SendEmailAppConnConfiguration {
   val EMAIL_SMTP_AUTH = CommonVars("wds.dss.appconn.email.smtp.auth", "true")
   val EMAIL_SMTP_STARTTLS_ENABLE = CommonVars("wds.dss.appconn.email.smtp.starttls.enable", "true")
   val EMAIL_SMTP_STARTTLS_REQUIRED = CommonVars("wds.dss.appconn.email.smtp.starttls.required", "true")
-  val EMAIL_SMTP_SSL_ENABLED = CommonVars("wds.dss.appconn.email.smtp.ssl.enable", "true")
+  val EMAIL_SMTP_SSL_ENABLED = CommonVars("wds.dss.appconn.email.smtp.ssl.enable", "false")
   val EMAIL_SMTP_TIMEOUT: CommonVars[Integer] = CommonVars("wds.dss.appconn.email.smtp.timeout", 25000)
 
 }
