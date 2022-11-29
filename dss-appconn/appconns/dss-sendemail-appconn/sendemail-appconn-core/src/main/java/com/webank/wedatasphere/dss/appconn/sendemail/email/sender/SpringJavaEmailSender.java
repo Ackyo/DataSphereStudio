@@ -22,6 +22,7 @@ import com.webank.wedatasphere.dss.appconn.sendemail.exception.EmailSendFailedEx
 import com.webank.wedatasphere.dss.standard.common.exception.operation.ExternalOperationFailedException;
 import java.io.ByteArrayInputStream;
 import java.util.Base64;
+import javax.mail.internet.InternetAddress;
 import org.apache.commons.lang.StringUtils;
 import org.apache.linkis.common.conf.CommonVars;
 import org.slf4j.Logger;
@@ -89,21 +90,21 @@ public class SpringJavaEmailSender extends AbstractEmailSender {
     private MimeMessage parseToMimeMessage(Email email) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "utf-8");
             messageHelper.setText(email.getContent(), true);
 
             if (StringUtils.isBlank(email.getFrom())) {
-                messageHelper.setFrom(DEFAULT_EMAIL_FROM().getValue());
+                messageHelper.setFrom(EMAIL_USERNAME().getValue());
             } else {
                 messageHelper.setFrom(email.getFrom());
             }
             messageHelper.setSubject(email.getSubject());
-            messageHelper.setTo(email.getTo());
+            messageHelper.setTo(InternetAddress.parse(email.getTo()));
             if (StringUtils.isNotBlank(email.getCc())) {
-                messageHelper.setCc(email.getCc());
+                messageHelper.setCc(InternetAddress.parse(email.getCc()));
             }
             if (StringUtils.isNotBlank(email.getBcc())) {
-                messageHelper.setBcc(email.getBcc());
+                messageHelper.setBcc(InternetAddress.parse(email.getBcc()));
             }
             for (Attachment attachment : email.getAttachments()) {
                 ByteArrayDataSource res = new ByteArrayDataSource(new ByteArrayInputStream(
